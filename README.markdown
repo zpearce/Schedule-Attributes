@@ -6,11 +6,9 @@ Schedule Attributes allows models (ORM agnostic) to accept recurring schedule fo
 
 To use, include the `ScheduleAttributes` module in your model class.
 
-```ruby
-class SomeModel
-  include ScheduleAttributes
-end
-```
+    class SomeModel
+      include ScheduleAttributes
+    end
 
 Your model must respond to `:schedule_yaml` and `:schedule_yaml=`, because ScheduleAttributes will serialize and deserialize the schedule in YAML using this column.  If you are using ActiveRecord, make a string column called `schedule_yaml`. If you're using Mongoid, make a string field like so: `field :schedule_yaml`.
 
@@ -22,9 +20,7 @@ Accepts form a parameter hash that represent a schedule, and creates an `IceCube
 
 E.x.
 
-```ruby
-@event.schedule_attributes = params[:event][:schedule_attributes]
-```
+    @event.schedule_attributes = params[:event][:schedule_attributes]
 
 ### Parameters Accepted
 
