@@ -68,7 +68,7 @@ module ScheduleAtts
         end
       when IceCube::MonthlyRule
         atts[:interval_unit] = 'month'
-        atts[:day_of_month] = rule_hash[:validations][:day_of_month]
+        atts[:day_of_month] = rule_hash[:validations][:day_of_month].first
       end
 
       if rule.until_date
