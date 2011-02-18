@@ -19,6 +19,7 @@ module ScheduleAtts
   def schedule_attributes=(options)
     options = options.dup
     options[:interval] = options[:interval].to_i
+    options[:day_of_month] &&= options[:day_of_month].to_i
     options[:start_date] &&= ScheduleAttributes.parse_in_timezone(options[:start_date])
     options[:date]       &&= ScheduleAttributes.parse_in_timezone(options[:date])
     options[:until_date] &&= ScheduleAttributes.parse_in_timezone(options[:until_date])
@@ -34,6 +35,8 @@ module ScheduleAtts
           IceCube::Rule.daily options[:interval]
         when 'week'
           IceCube::Rule.weekly(options[:interval]).day( *IceCube::DAYS.keys.select{|day| options[day].to_i == 1 } )
+        when 'month'
+          IceCube::Rule.monthly(options[:interval]).day_of_month(options[:day_of_month].to_i)
       end
 
       rule.until(options[:until_date]) if options[:ends] == 'eventually'
