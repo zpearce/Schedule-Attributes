@@ -66,6 +66,9 @@ module ScheduleAtts
         rule_hash[:validations][:day].each do |day_idx|
           atts[ DAY_NAMES[day_idx] ] = 1
         end
+      when IceCube::MonthlyRule
+        atts[:interval_unit] = 'month'
+        atts[:day_of_month] = rule_hash[:validations][:day_of_month]
       end
 
       if rule.until_date
