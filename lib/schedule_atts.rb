@@ -38,8 +38,8 @@ module ScheduleAtts
           # 1 means repeat by day of month, 0 means day of week
           if options[:day_of_month].to_i == 1
             IceCube::Rule.monthly(options[:interval]).day_of_month(options[:start_date].day)
-          else
-            IceCube::Rule.monthly(options[:interval]).day_of_week( *IceCube::DAYS.keys.select{|day| options[day].to_i == 1})
+          elsif options[:day_of_month].to_i == 0
+            IceCube::Rule.monthly(options[:interval]).day_of_week(options[:start_date].wday => [ScheduleAttributes.get_monthweek(options[:start_date])])
           end
       end
 
@@ -72,7 +72,10 @@ module ScheduleAtts
         end
       when IceCube::MonthlyRule
         atts[:interval_unit] = 'month'
-        atts[:day_of_month] = rule_hash[:validations][:day_of_month].first
+        atts[:day_of_month] = 1 if rule_hash[:validations][:day_of_month]
+        if rule_hash[:validations][:day_of_week]
+          atts[:day_of_week] = 1
+        end
       end
 
       if rule.until_date
@@ -96,6 +99,13 @@ module ScheduleAtts
       Time.zone.parse(str)
     else
       Time.parse(str)
+    end
+  end
+
+  def self.get_monthweek(date)
+    day = date.day
+    7.step(38, 7).each_with_index do |week, i| 
+      return i + 1 if day - week < 1
     end
   end
 end
